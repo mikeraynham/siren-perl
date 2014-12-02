@@ -12,13 +12,7 @@ use Siren::Entity;
 
 sub new {
     my $class = shift;
-    bless {
-        class      => [],
-        properties => [],
-        links      => [],
-        actions    => [],
-        entities   => [],
-    }, $class;
+    bless {}, $class;
 }
 
 sub add_class {
@@ -41,7 +35,7 @@ sub add_link {
 
 sub add_action {
     my $self = shift;
-    push @{$self->{actions}}, {action => {@_}, fields => []};
+    push @{$self->{actions}}, {@_};
     return $self;
 }
 
@@ -55,6 +49,21 @@ sub add_action_field {
 sub construct {
     my $self = shift;
 
+    my %map = (
+        class      => sub { Siren::Class->new( @{$_[0]} ) },
+        properties => sub { Siren::Property->new( @{$_[0]} ) },
+        actions    => sub { [map { Siren::Action->new(%$_) } @{$_[0]}] },
+        links      => sub { [map { Siren::Link->new(%$_) } @{$_[0]}] },
+    );
+        
+    my %args;
+
+    for my $attr (keys %map) {
+        next unless exists $self->{$attr} && @{$self->{$attr}};
+        $args{$attr} = $map{$attr}->($self->{$attr});
+    }
+
+    Siren::Entity->new(%args);
 }
 
 1;

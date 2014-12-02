@@ -46,6 +46,60 @@ my $factory = Siren::Factory
         href => 'http://api.x.io/orders/43',
     );
 
-pass();
+my $entity = $factory->construct;
+
+isa_ok($entity, 'Siren::Entity');
+
+is_deeply(
+    $entity->to_struct,
+    {
+        properties => {
+            order_number => 42,
+            item_count   => 3,
+            status       => 'pending',
+        },
+        actions => [
+            {
+                name   => 'add-item',
+                title  => 'Add Item',
+                method => 'POST',
+                href   => 'http://api.x.io/orders/42/items',
+                type   => 'application/x-www-form-urlencoded',
+                fields => [
+                    {
+                        type  => 'hidden',
+                        value => 42,
+                        title => 'Order Number',
+                        name  => 'order_number'
+                    },
+                    {
+                        name => 'product_code',
+                        type => 'text'
+                    },
+                    {
+                        name => 'quantity',
+                        type => 'number'
+                    },
+                ],
+            },
+        ],
+        class => ['order'],
+        links => [
+            {
+                rel  => ['self'],
+                href => 'http://api.x.io/orders/42',
+            },
+            {
+                rel  => ['previous'],
+                href => 'http://api.x.io/orders/41'
+            },
+            {
+                rel  => ['next'],
+                href => 'http://api.x.io/orders/43',
+            },
+        ],
+    },
+    'entity struct is ok'
+);
 
 done_testing;
