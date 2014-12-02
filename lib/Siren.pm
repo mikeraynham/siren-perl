@@ -1,5 +1,7 @@
 package Siren;
 
+# ABSTRACT: Lures nearby data with its enchanting structures.
+
 use strict;
 use warnings FATAL => qw(all);
 
