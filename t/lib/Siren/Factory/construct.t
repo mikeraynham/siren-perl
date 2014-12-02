@@ -44,6 +44,26 @@ my $factory = Siren::Factory
     ->add_link(
         rel  => 'next',
         href => 'http://api.x.io/orders/43',
+    )
+    ->add_sub_entity(
+        Siren::Factory
+            ->new
+            ->add_class(qw(items collection))
+            ->add_rel(qw(http://x.io/rels/order-items))
+            ->add_href('http://api.x.io/orders/42/items'),
+
+        Siren::Factory
+            ->new
+            ->add_class(qw(info customer))
+            ->add_rel(qw(http://x.io/rels/customer))
+            ->add_property(
+                customer_id => 'pj123',
+                name        => 'Peter Joseph',
+            )
+            ->add_link(
+                rel  => 'self',
+                href => 'http://api.x.io/customers/pj123',
+            ),
     );
 
 my $entity = $factory->construct;
@@ -53,11 +73,33 @@ isa_ok($entity, 'Siren::Entity');
 is_deeply(
     $entity->to_struct,
     {
+        class => ['order'],
         properties => {
             order_number => 42,
             item_count   => 3,
             status       => 'pending',
         },
+        entities => [
+            {
+                class => ['items', 'collection'],
+                href  => 'http://api.x.io/orders/42/items',
+                rel   => ['http://x.io/rels/order-items'],
+            },
+            {
+                class => ['info', 'customer'],
+                links => [
+                    {
+                        href => 'http://api.x.io/customers/pj123',
+                        rel => ['self'],
+                    },
+                ],
+                rel => ['http://x.io/rels/customer'],
+                properties => {
+                    name => 'Peter Joseph',
+                    customer_id => 'pj123'
+                },
+            },
+        ],
         actions => [
             {
                 name   => 'add-item',
@@ -83,7 +125,6 @@ is_deeply(
                 ],
             },
         ],
-        class => ['order'],
         links => [
             {
                 rel  => ['self'],
