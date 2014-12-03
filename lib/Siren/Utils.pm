@@ -26,23 +26,20 @@ sub _obj_to_arrayref {
 }
 
 sub _str {
-    my ($attr) = @_;
-    sub { ref($_[0]) eq '' or Carp::confess "$attr must be a string" };
+    sub { ref($_[0]) eq '' or Carp::confess 'must be a string' };
 }
 
 sub _arrayref {
-    my ($attr) = @_;
-    sub { ref($_[0]) eq 'ARRAY' or Carp::confess "$attr must be an arrayref" };
+    sub { ref($_[0]) eq 'ARRAY' or Carp::confess 'must be an arrayref' };
 }
 
 sub _hashref {
-    my ($attr) = @_;
-    sub { ref($_[0]) eq 'HASH' or Carp::confess "$attr must be a hashref" };
+    sub { ref($_[0]) eq 'HASH' or Carp::confess 'must be a hashref' };
 }
 
 sub _obj_arrayref {
-    my ($attr, $class) = @_;
-    my $msg = "$attr must be an arrayref of $class objects";
+    my ($class) = @_;
+    my $msg = "must be an arrayref of $class objects";
     sub {
         ref($_[0]) eq 'ARRAY' or Carp::confess $msg;
         @{$_[0]} > 0          or Carp::confess $msg;

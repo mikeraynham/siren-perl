@@ -2,6 +2,7 @@ use strict;
 use warnings FATAL => qw(all);
 
 use Test::More;
+use Test::Warnings;
 use Test::Fatal;
 
 use Siren::Utils qw(
@@ -56,71 +57,71 @@ subtest 'isa str' => sub {
     );
 
     like(
-        exception { _str('attr')->($foo) },
-        qr/attr must be a string/,
+        exception { _str()->($foo) },
+        qr/must be a string/,
         '...but it dies when passed an object'
     );
 };
 
 subtest 'isa arrayref' => sub {
 
-    ok( _arrayref('attr')->($arf),
+    ok( _arrayref()->($arf),
         'arrayref okay when passed an arrayref...'
     );
 
     like(
-        exception { _arrayref('attr')->($foo) },
-        qr/attr must be an arrayref/,
+        exception { _arrayref()->($foo) },
+        qr/must be an arrayref/,
         '...but it dies when passed an object...'
     );
 
     like(
-        exception { _arrayref('attr')->($hrf) },
-        qr/attr must be an arrayref/,
+        exception { _arrayref()->($hrf) },
+        qr/must be an arrayref/,
         '...or a hashref'
     );
 };
 
 subtest 'isa hashref' => sub {
 
-    ok( _hashref('attr')->($hrf),
+    ok( _hashref()->($hrf),
         'hashref okay when passed a hashref...'
     );
 
     like(
-        exception { _hashref('attr')->($foo) },
-        qr/attr must be a hashref/,
+        exception { _hashref()->($foo) },
+        qr/must be a hashref/,
         '...but it dies when passed an object...'
     );
 
     like(
-        exception { _hashref('attr')->($arf) },
-        qr/attr must be a hashref/,
+        exception { _hashref()->($arf) },
+        qr/must be a hashref/,
         '...or an arrayref'
     );
 };
 
 subtest 'isa obj_arrayref' => sub {
 
-    ok( _obj_arrayref('attr', 'Foo')->([$foo, $foo]),
+    ok( _obj_arrayref('Foo')->([$foo, $foo]),
         'obj_arrayref okay when passed an arrayref of objects...'
     );
 
     like(
-        exception { _obj_arrayref('attr', 'Foo')->([$foo, $bar]) },
-        qr/attr must be an arrayref/,
+        exception { _obj_arrayref('Foo')->([$foo, $bar]) },
+        qr/must be an arrayref/,
         '...but it dies when passed an object of the wrong type...'
     );
 
     like(
-        exception { _obj_arrayref('attr', 'Foo')->($str) },
-        qr/attr must be an arrayref/,
+        exception { _obj_arrayref('Foo')->($str) },
+        qr/must be an arrayref/,
         '...or a string...'
     );
 
     like(
-        exception { _obj_arrayref('attr', 'Foo')->([]) },
-        qr/attr must be an arrayref/,
+        exception { _obj_arrayref('Foo')->([]) },
+        qr/must be an arrayref/,
         '...or an empty arrayref'
     );
 

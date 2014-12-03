@@ -18,31 +18,31 @@ extends 'Siren';
 has class => (
     is     => 'ro',
     coerce => _str_to_arrayref(),
-    isa    => _arrayref('class'),
+    isa    => _arrayref(),
 );
 
 has properties => (
     is     => 'ro',
-    isa    => _hashref('properties'),
+    isa    => _hashref(),
 );
 
 has entities => (
     is     => 'ro',
     coerce => _obj_to_arrayref('Siren::SubEntity'),
-    isa    => _obj_arrayref('entities', 'Siren::SubEntity'),
+    isa    => _obj_arrayref('Siren::SubEntity'),
 );
 
 has links => (
     is     => 'ro',
     coerce => _obj_to_arrayref('Siren::Link'),
-    isa    => _obj_arrayref('links', 'Siren::Link'),
+    isa    => _obj_arrayref('Siren::Link'),
 
 );
 
 has actions => (
     is     => 'ro',
     coerce => _obj_to_arrayref('Siren::Action'),
-    isa    => _obj_arrayref('actions', 'Siren::Action'),
+    isa    => _obj_arrayref('Siren::Action'),
 );
 
 has title => (
