@@ -1,17 +1,11 @@
-package Siren::Link;
+package Siren::Role::Rel;
 
 use Siren::Utils qw(
     _str_to_arrayref
     _arrayref
 );
 
-use Moo;
-use namespace::clean;
-
-with 'Siren::Role::ToJSON';
-with 'Siren::Role::HRef';
-with 'Siren::Role::Title';
-with 'Siren::Role::Type';
+use Moo::Role;
 
 has rel => (
     is        => 'ro',

@@ -3,21 +3,18 @@ use warnings FATAL => qw(all);
 
 use Test::More;
 use Siren::Entity;
-use Siren::Class;
 use Siren::Property;
 use Siren::Action;
 use Siren::Action::Field;
 use Siren::Link;
 
 my $entity = Siren::Entity->new(
-    class => Siren::Class->new('order'),
-    properties => [
-        Siren::Property->new(
-            order_number => 42,
-            item_count   =>  3,
-            status       => 'pending',
-        ),
-    ],
+    class => 'order',
+    properties => {
+        order_number => 42,
+        item_count   =>  3,
+        status       => 'pending',
+    },
     actions => [
         Siren::Action->new(
             name   => 'add-item',

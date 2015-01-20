@@ -6,7 +6,7 @@ use Test::Warnings;
 use Test::Fatal;
 
 use Siren::Entity;
-use Siren::SubEntity;
+use Siren::Entity::Link;
 use Siren::Link;
 use Siren::Action;
 
@@ -21,8 +21,11 @@ subtest 'coercions' => sub {
         class      => 'foo',
         title      => 'Foo',
         properties => {bar => 'baz'},
-        entities   => Siren::SubEntity->new,
-        links      => Siren::Link->new(
+        entities   => Siren::Entity::Link->new(
+            rel  => 'subentity',
+            href => 'http://localhost',
+        ),
+        links => Siren::Link->new(
             rel  => 'item',
             href => 'http://localhost',
         ),

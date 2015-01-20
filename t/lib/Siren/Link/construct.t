@@ -13,8 +13,10 @@ my %args = (
 
 my $link = Siren::Link->new(%args);
 
+isa_ok($link->href, 'URI', 'href');
+
 is_deeply(
-    $link->to_struct,
+    $link->TO_JSON,
     {%args, rel => ['self']},
     'struct ok'
 );

@@ -33,7 +33,7 @@ my %args = (
 my $action = Siren::Action->new(%args);
 
 is_deeply(
-    $action->to_struct,
+    $action->TO_JSON,
     {
         %args,
         fields => [{
