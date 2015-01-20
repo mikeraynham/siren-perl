@@ -1,0 +1,68 @@
+@startuml
+
+class Siren::Entity {
+    class : String[]
+    properties : HashMap
+    entities : Siren::Entity[]
+    links : Siren::Link[]
+    actions : Siren::Action[]
+    TO_JSON()
+}
+
+class Siren::Entity::Link {
+    class : String[]
+    properties : HashMap
+    entities : Siren::Entity[]
+    links : Siren::Link[]
+    actions : Siren::Action[]
+    rel : String[]
+    href :  String[]
+    type : String[]
+    TO_JSON()
+}
+
+class Siren::Entity::Representation {
+    class : String[]
+    properties : HashMap
+    entities : Siren::Entity[]
+    links : Siren::Link[]
+    actions : Siren::Action[]
+    rel : String[]
+    TO_JSON()
+}
+
+class Siren::Action {
+    name : String
+    class : String[]
+    method : String
+    href : String
+    title : String
+    type : String
+    fields : Siren::Action::Field[]
+    TO_JSON()
+}
+
+class Siren::Action::Field {
+    name : String
+    title : String
+    type : String
+    value : String
+    TO_JSON()
+}
+
+class Siren::Link {
+    href : String
+    title : String
+    type : String
+    rel : String[]
+    TO_JSON()
+}
+
+Siren::Entity <|-- Siren::Entity::Link
+Siren::Entity <|-- Siren::Entity::Representation
+
+Siren::Entity  --> Siren::Action
+Siren::Action  --> "0..*" Siren::Action::Field
+Siren::Entity  --> "0..*" Siren::Link
+
+@enduml
