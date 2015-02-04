@@ -2,6 +2,7 @@
 
 class Siren::Entity {
     class : String[]
+    title : String
     properties : HashMap
     entities : Siren::Entity[]
     links : Siren::Link[]
@@ -9,24 +10,18 @@ class Siren::Entity {
     TO_JSON()
 }
 
-class Siren::Entity::Link {
-    class : String[]
-    properties : HashMap
-    entities : Siren::Entity[]
-    links : Siren::Link[]
-    actions : Siren::Action[]
+class Siren::SubEntity <<abstract interface>> {
+
+}
+
+class Siren::SubEntity::Link {
     rel : String[]
     href :  String[]
     type : String[]
     TO_JSON()
 }
 
-class Siren::Entity::Representation {
-    class : String[]
-    properties : HashMap
-    entities : Siren::Entity[]
-    links : Siren::Link[]
-    actions : Siren::Action[]
+class Siren::SubEntity::Representation {
     rel : String[]
     TO_JSON()
 }
@@ -58,10 +53,16 @@ class Siren::Link {
     TO_JSON()
 }
 
-Siren::Entity <|-- Siren::Entity::Link
-Siren::Entity <|-- Siren::Entity::Representation
+Siren::Entity --> "0..*" Siren::SubEntity
 
-Siren::Entity  --> Siren::Action
+Siren::SubEntity --> "0..*" Siren::SubEntity::Link
+Siren::SubEntity --> "0..*" Siren::SubEntity::Representation
+
+Siren::SubEntity::Representation --|> Siren::Entity
+
+Siren::Entity  --> "0..*" Siren::Action
+Siren::Entity  --> "0..*" Siren::Class
+Siren::Entity  --> "0..*" Siren::Property
 Siren::Action  --> "0..*" Siren::Action::Field
 Siren::Entity  --> "0..*" Siren::Link
 

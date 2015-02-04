@@ -3,7 +3,6 @@ use warnings FATAL => qw(all);
 
 use Test::More;
 use Siren::Entity;
-use Siren::Property;
 use Siren::Action;
 use Siren::Action::Field;
 use Siren::Link;
