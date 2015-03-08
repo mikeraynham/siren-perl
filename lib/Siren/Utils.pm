@@ -1,7 +1,7 @@
 package Siren::Utils;
 
 use strict;
-use warnings FATAL => qw(all);
+use warnings;
 
 use Carp ();
 use Exporter qw(import);

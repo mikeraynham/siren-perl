@@ -1,5 +1,8 @@
 package Siren::Action;
 
+use strict;
+use warnings;
+
 use Siren::Utils qw(
     _to_upper
     _valid_str
@@ -7,7 +10,7 @@ use Siren::Utils qw(
     _obj_arrayref
 );
 
-use Moo;
+use Moo 2;
 use namespace::clean;
 
 with 'Siren::Role::ToJSON';

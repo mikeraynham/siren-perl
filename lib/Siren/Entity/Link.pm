@@ -1,6 +1,9 @@
 package Siren::Entity::Link;
 
-use Moo;
+use strict;
+use warnings;
+
+use Moo 2;
 use namespace::clean;
 
 with 'Siren::Role::ToJSON';

@@ -1,6 +1,9 @@
 package Siren::Entity::Representation;
 
-use Moo;
+use strict;
+use warnings;
+
+use Moo 2;
 use namespace::clean;
 
 extends 'Siren::Entity';

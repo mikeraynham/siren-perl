@@ -6,10 +6,13 @@ use Siren::Utils qw(
     _obj_arrayref
 );
 
-use Moo;
+use Moo 2;
 use namespace::clean;
 
-my @SubEntity = qw(Siren::Entity::Link Siren::Entity::Representation);
+my @SubEntity = qw(
+    Siren::Entity::Link
+    Siren::Entity::Representation
+);
 
 with 'Siren::Role::ToJSON';
 with 'Siren::Role::Class';

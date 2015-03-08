@@ -1,7 +1,7 @@
 package Siren::Builder;
 
 use strict;
-use warnings FATAL => qw(all);
+use warnings;
 
 use List::Util 1.33 qw(pairs);
 
@@ -38,7 +38,7 @@ sub construct {
                 )
             } @{$_[0]}
         ] },
-        actions    => sub { [
+        actions => sub { [
             map {
                 for my $field (@{$_->{fields}}) {
                     $field = Siren::Action::Field->new(%$field);

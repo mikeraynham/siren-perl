@@ -1,11 +1,14 @@
 package Siren::Action::Field;
 
+use strict;
+use warnings;
+
 use Siren::Utils qw(
     _to_lower
     _valid_str
 );
 
-use Moo;
+use Moo 2;
 use namespace::clean;
 
 with 'Siren::Role::ToJSON';

@@ -1,11 +1,14 @@
 package Siren::Link;
 
+use strict;
+use warnings;
+
 use Siren::Utils qw(
     _str_to_arrayref
     _arrayref
 );
 
-use Moo;
+use Moo 2;
 use namespace::clean;
 
 with 'Siren::Role::ToJSON';

@@ -1,8 +1,10 @@
 package Siren::Role::ToJSON;
 
-use Moo::Role;
 use Safe::Isa;
 use Scalar::Util qw(reftype);
+
+use Moo::Role 2;
+use namespace::clean;
 
 sub TO_JSON {
     my $thing = shift;

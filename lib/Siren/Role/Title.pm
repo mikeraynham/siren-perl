@@ -1,6 +1,10 @@
 package Siren::Role::Title;
 
-use Moo::Role;
+use strict;
+use warnings;
+
+use Moo::Role 2;
+use namespace::clean;
 
 has title => (
     is        => 'ro',

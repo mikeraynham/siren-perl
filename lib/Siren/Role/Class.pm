@@ -1,11 +1,15 @@
 package Siren::Role::Class;
 
-use Moo::Role;
+use strict;
+use warnings;
 
 use Siren::Utils qw(
     _str_to_arrayref
     _arrayref
 );
+
+use Moo::Role 2;
+use namespace::clean;
 
 has class => (
     is        => 'ro',
