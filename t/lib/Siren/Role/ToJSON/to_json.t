@@ -1,8 +1,6 @@
 use strict;
 use warnings FATAL => qw(all);
 
-use Data::Dumper;
-
 use Test::More;
 use Test::Warnings;
 
