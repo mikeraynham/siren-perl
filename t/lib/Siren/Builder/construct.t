@@ -1,63 +1,21 @@
 use strict;
 use warnings FATAL => qw(all);
 
+use lib 't/helpers/lib';
+
 use Test::More;
 use Test::Warnings;
 
+use Siren::Test::BuildArgs;
+use Siren::Test::TO_JSON;
+
 use Siren::Builder;
 
+my $build_args = Siren::Test::BuildArgs->new;
+my $to_json    = Siren::Test::TO_JSON->new;
+
 my %args = (
-    class => 'order',
-    properties => {
-        order_number => 42,
-        item_count   =>  3,
-        status       => 'pending',
-    },
-    entities => [{
-        class => [qw(items collection)],
-        rel   => 'http://x.io/rels/order-items',
-        href  => 'http://api.x.io/orders/42/items',
-    }, {
-        class => [qw(info customer)],
-        rel   => 'http://x.io/rels/customer',
-        properties => {
-            customer_id => 'pj123',
-            name        => 'Peter Joseph',
-        },
-        links => [{
-            rel  => 'self',
-            href => 'http://api.x.io/customers/pj123',
-        }],
-    }],
-    actions => [{
-        name   => 'add-item',
-        title  => 'Add Item',
-        method => 'POST',
-        href   => 'http://api.x.io/orders/42/items',
-        type   => 'application/x-www-form-urlencoded',
-        fields => [{
-            name  => 'order_number',
-            title => 'Order Number',
-            type  => 'hidden',
-            value => 42,
-        }, {
-            name  => 'product_code',
-            type  => 'text',
-        }, {
-            name  => 'quantity',
-            type  => 'number',
-        }],
-    }],
-    links => [{
-        rel  => 'self',
-        href => 'http://api.x.io/orders/42',
-    }, {
-        rel  => 'previous',
-        href => 'http://api.x.io/orders/41',
-    }, {
-        rel  => 'next',
-        href => 'http://api.x.io/orders/43',
-    }],
+    $build_args->complete_entity,
 );
 
 my $builder = Siren::Builder->new(%args);
@@ -68,72 +26,7 @@ isa_ok($entity, 'Siren::Entity');
 is_deeply(
     $entity->TO_JSON,
     {
-        class => ['order'],
-        properties => {
-            order_number => 42,
-            item_count   => 3,
-            status       => 'pending',
-        },
-        entities => [
-            {
-                class => ['items', 'collection'],
-                href  => 'http://api.x.io/orders/42/items',
-                rel   => ['http://x.io/rels/order-items'],
-            },
-            {
-                class => ['info', 'customer'],
-                rel   => ['http://x.io/rels/customer'],
-                links => [
-                    {
-                        href => 'http://api.x.io/customers/pj123',
-                        rel => ['self'],
-                    },
-                ],
-                properties => {
-                    name => 'Peter Joseph',
-                    customer_id => 'pj123'
-                },
-            },
-        ],
-        actions => [
-            {
-                name   => 'add-item',
-                title  => 'Add Item',
-                method => 'POST',
-                href   => 'http://api.x.io/orders/42/items',
-                type   => 'application/x-www-form-urlencoded',
-                fields => [
-                    {
-                        type  => 'hidden',
-                        value => 42,
-                        title => 'Order Number',
-                        name  => 'order_number'
-                    },
-                    {
-                        name => 'product_code',
-                        type => 'text'
-                    },
-                    {
-                        name => 'quantity',
-                        type => 'number'
-                    },
-                ],
-            },
-        ],
-        links => [
-            {
-                rel  => ['self'],
-                href => 'http://api.x.io/orders/42',
-            },
-            {
-                rel  => ['previous'],
-                href => 'http://api.x.io/orders/41'
-            },
-            {
-                rel  => ['next'],
-                href => 'http://api.x.io/orders/43',
-            },
-        ],
+        $to_json->complete_entity,
     },
     'entity struct is ok'
 );
