@@ -23,6 +23,8 @@ my $entity  = $builder->construct;
 
 isa_ok($entity, 'Siren::Entity');
 
+use Data::Dumper; print Dumper($entity);
+
 is_deeply(
     $entity->TO_JSON,
     {
