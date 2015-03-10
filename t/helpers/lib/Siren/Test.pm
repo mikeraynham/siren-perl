@@ -48,23 +48,29 @@ sub _search_actions {
             method => 'POST',
             href   => 'http://api.x.io/search/',
             type   => 'application/x-www-form-urlencoded',
-            fields => [
-                $self->_action_field(
-                    name  => 'start_date',
-                    title => 'Start date',
-                    type  => 'text',
-                    value => 1425895200,
-                ),
-                $self->_action_field(
-                    name  => 'end_date',
-                    title => 'End date',
-                    type  => 'text',
-                    value => 1425896100,
-                ),
-            ],
+            fields => $self->_search_action_fields,
         ),
     ];
 }
+
+sub _search_action_fields {
+    my $self = shift;
+
+    return [
+        $self->_action_field(
+            name  => 'start_date',
+            title => 'Start date',
+            type  => 'text',
+            value => 1425895200,
+        ),
+        $self->_action_field(
+            name  => 'end_date',
+            title => 'End date',
+            type  => 'text',
+            value => 1425896100,
+        ),
+    ];
+};
 
 sub _customer_properties {
     my $self        = shift;
@@ -309,4 +315,3 @@ sub entity_actions_only {
 }
 
 1;
-
