@@ -7,30 +7,46 @@ use Test::More;
 use Test::Warnings;
 
 use Siren::Test::BuildArgs;
+use Siren::Test::Siren;
 use Siren::Test::TO_JSON;
 
 use Siren::Builder;
 
-my $build_args = Siren::Test::BuildArgs->new;
-my $to_json    = Siren::Test::TO_JSON->new;
+my $test_args  = Siren::Test::BuildArgs->new;
+my $test_siren = Siren::Test::Siren->new;
+my $test_json  = Siren::Test::TO_JSON->new;
 
-my %args = (
-    $build_args->complete_entity,
+my @tests = qw(
+    entity_null_entity
+    entity_complete
+    entity_class_only
+    entity_properties_only
+    entity_top_level_sub_entities_only
+    entity_sub_entities_only
+    entity_links_only
+    entity_actions_only
 );
 
-my $builder = Siren::Builder->new(%args);
-my $entity  = $builder->construct;
+for my $method (@tests) {
+    my $description = $method;
+    $description =~ s/^entity_//;
+    $description =~ tr/_/ /;
 
-isa_ok($entity, 'Siren::Entity');
+    subtest $description => sub {
+        my $siren = Siren::Builder->new($test_args->$method)->construct;
 
-use Data::Dumper; print Dumper($entity);
+        is_deeply(
+            $siren,
+            {$test_siren->$method},
+            "Siren object ok"
+        );
 
-is_deeply(
-    $entity->TO_JSON,
-    {
-        $to_json->complete_entity,
-    },
-    'entity struct is ok'
-);
+        is_deeply(
+            $siren->TO_JSON,
+            {$test_json->$method},
+            "Intermediate JSON structure ok"
+        );
+    };
+}
 
 done_testing;
