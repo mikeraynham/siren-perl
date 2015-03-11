@@ -40,10 +40,13 @@ sub construct {
         ] },
         actions => sub { [
             map {
-                for my $field (@{$_->{fields}}) {
-                    $field = Siren::Action::Field->new(%$field);
+                # Prevent autovivification.
+                if (exists $_->{fields}) {
+                    for my $field (@{$_->{fields}}) {
+                        $field = Siren::Action::Field->new(%$field);
+                    }
                 }
-                Siren::Action->new(%$_)
+                Siren::Action->new(%$_);
             } @{$_[0]}
         ] },
     );

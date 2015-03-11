@@ -11,49 +11,59 @@ sub _entity_link           { +{@_[1 .. $#_]} }
 sub _entity_representation { +{@_[1 .. $#_]} }
 sub _action                { +{@_[1 .. $#_]} }
 sub _action_field          { +{@_[1 .. $#_]} }
+sub _link                  { +{@_[1 .. $#_]} }
 
-sub _search_properties {
+sub search_class {
+    my $self = shift;
+    $self->_ref('search');
+}
+
+sub search_properties {
     return {
         date_from => 1425895200, 
         date_to   => 1425897000,
     };
 }
 
-sub _search_links {
+sub search_links {
     my $self = shift;
 
     return [
-        $self->_entity_link(
+        $self->_link(
             rel  => $self->_ref('self'),
             href => 'http://api.x.io/search/1425895200',
         ),
-        $self->_entity_link(
+        $self->_link(
             rel  => $self->_ref('previous'),
             href => 'http://api.x.io/search/1425893400',
         ),
-        $self->_entity_link(
+        $self->_link(
             rel  => $self->_ref('next'),
             href => 'http://api.x.io/search/1425897000',
         ),
     ];
 }
 
-sub _search_actions {
-    my $self = shift;
+sub search_actions {
+    my $self   = shift;
+    my $fields = shift;
 
-    return [
-        $self->_action(
-            name   => 'refine-search',
-            title  => 'Refine search',
-            method => 'POST',
-            href   => 'http://api.x.io/search/',
-            type   => 'application/x-www-form-urlencoded',
-            fields => $self->_search_action_fields,
-        ),
-    ];
+    my %action = (
+        name   => 'refine-search',
+        title  => 'Refine search',
+        method => 'POST',
+        href   => 'http://api.x.io/search/',
+        type   => 'application/x-www-form-urlencoded',
+    );
+
+    if ($fields) {
+        $action{fields} = $self->search_action_fields;
+    }
+
+    return [$self->_action(%action)];
 }
 
-sub _search_action_fields {
+sub search_action_fields {
     my $self = shift;
 
     return [
@@ -71,6 +81,37 @@ sub _search_action_fields {
         ),
     ];
 };
+
+sub search_entities {
+    my $self         = shift;
+    my $sub_entities = shift;
+
+    my @customers = (
+        {
+            class      => $self->_ref('customer'),
+            rel        => $self->_ref('http://x.io/rel/customer'),
+            properties => $self->_customer_properties(489),
+        },
+        {
+            class      => $self->_ref('customer'),
+            rel        => $self->_ref('http://x.io/rel/customer'),
+            properties => $self->_customer_properties(201),
+        },
+    );
+
+    if ($sub_entities) {
+        $customers[0]->{entities} = [
+            $self->_order_entities(10186),
+            $self->_order_entities(10213),
+        ];
+
+        $customers[1]->{entities} = [
+            $self->_order_entities(10302),
+        ];
+    }
+
+    return [map { $self->_entity_representation(%$_) } @customers];
+}
 
 sub _customer_properties {
     my $self        = shift;
@@ -216,101 +257,6 @@ sub _order_entities {
         entities => [
             map { $self->_order_item(%$_) } @{$order->{products}},
         ],
-    );
-}
-
-sub _search_entities {
-    my $self         = shift;
-    my $sub_entities = shift;
-
-    my @customers = (
-        {
-            class      => $self->_ref('customer'),
-            rel        => $self->_ref('http://x.io/rel/customer'),
-            properties => $self->_customer_properties(489),
-        },
-        {
-            class      => $self->_ref('customer'),
-            rel        => $self->_ref('http://x.io/rel/customer'),
-            properties => $self->_customer_properties(201),
-        },
-    );
-
-    if ($sub_entities) {
-        $customers[0]->{entities} = [
-            $self->_order_entities(10186),
-            $self->_order_entities(10213),
-        ];
-
-        $customers[1]->{entities} = [
-            $self->_order_entities(10302),
-        ];
-    }
-
-    return [map { $self->_entity_representation(%$_) } @customers];
-}
-
-sub entity_null_entity {
-    ();
-}
-
-sub entity_complete {
-    my $self = shift;
-
-    return (
-        class      => $self->_ref('search'),
-        properties => $self->_search_properties,
-        entities   => $self->_search_entities,
-        links      => $self->_search_links,
-        actions    => $self->_search_actions,
-    );
-}
-
-sub entity_class_only {
-    my $self = shift;
-
-    return (
-        class => $self->_ref('search'),
-    );
-}
-
-sub entity_properties_only {
-    my $self = shift;
-
-    return (
-        properties => $self->_search_properties,
-    );
-}
-
-sub entity_top_level_sub_entities_only {
-    my $self = shift;
-
-    return (
-        entities => $self->_search_entities(0),
-    );
-}
-
-sub entity_sub_entities_only {
-    my $self = shift;
-
-    return (
-        entities => $self->_search_entities(1),
-    );
-}
-
-sub entity_links_only {
-    my $self = shift;
-
-    return (
-        links => $self->_search_links,
-    );
-}
-
-sub entity_actions_only {
-    my $self = shift;
-
-    return (
-        actions => $self->_search_actions,
     );
 }
 
