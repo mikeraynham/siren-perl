@@ -13,19 +13,55 @@ sub _action                { +{@_[1 .. $#_]} }
 sub _action_field          { +{@_[1 .. $#_]} }
 sub _link                  { +{@_[1 .. $#_]} }
 
-sub search_class {
+sub entity_class_only {
+    class => $_[0]->_search_class;
+}
+
+sub entity_properties_only {
+    properties => $_[0]->_search_properties;
+}
+
+sub entity_top_level_sub_entities_only {
+    entities => $_[0]->_search_entities(0);
+}
+
+sub entity_nested_sub_entities_only {
+    entities => $_[0]->_search_entities(1);
+}
+
+sub entity_links_only {
+    links => $_[0]->_search_links;
+}
+
+sub entity_actions_only_no_fields {
+    actions => $_[0]->_search_actions(0);
+}
+
+sub entity_actions_only_with_fields {
+    actions    => $_[0]->_search_actions(1);
+}
+
+sub entity_complete {
+    class      => $_[0]->_search_class,
+    properties => $_[0]->_search_properties,
+    entities   => $_[0]->_search_entities(1),
+    links      => $_[0]->_search_links,
+    actions    => $_[0]->_search_actions(1);
+}
+
+sub _search_class {
     my $self = shift;
     $self->_ref('search');
 }
 
-sub search_properties {
+sub _search_properties {
     return {
         date_from => 1425895200, 
         date_to   => 1425897000,
     };
 }
 
-sub search_links {
+sub _search_links {
     my $self = shift;
 
     return [
@@ -44,7 +80,7 @@ sub search_links {
     ];
 }
 
-sub search_actions {
+sub _search_actions {
     my $self   = shift;
     my $fields = shift;
 
@@ -57,13 +93,13 @@ sub search_actions {
     );
 
     if ($fields) {
-        $action{fields} = $self->search_action_fields;
+        $action{fields} = $self->_search_action_fields;
     }
 
     return [$self->_action(%action)];
 }
 
-sub search_action_fields {
+sub _search_action_fields {
     my $self = shift;
 
     return [
@@ -82,7 +118,7 @@ sub search_action_fields {
     ];
 };
 
-sub search_entities {
+sub _search_entities {
     my $self         = shift;
     my $sub_entities = shift;
 

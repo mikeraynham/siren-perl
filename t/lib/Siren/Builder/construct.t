@@ -18,44 +18,24 @@ my $test_siren     = Siren::Test::Siren->new;
 my $test_to_json   = Siren::Test::TO_JSON->new;
 
 my @tests = (
-    'entity with class only' => sub {
-        class      => $_[0]->search_class,
-    },
-    'entity with properties only' => sub {
-        properties => $_[0]->search_properties,
-    },
-    'entity with top-level sub-entities only' => sub {
-        entities   => $_[0]->search_entities(0),
-    },
-    'entity with nested sub-entities only' => sub {
-        entities   => $_[0]->search_entities(1),
-    },
-    'entity with links only' => sub {
-        links      => $_[0]->search_links,
-    },
-    'entity with actions only (no action fields)' => sub {
-        actions    => $_[0]->search_actions(0),
-    },
-    'entity with actions only (with action fields)' => sub {
-        actions    => $_[0]->search_actions(1),
-    },
-    'complete entity' => sub {
-        class      => $_[0]->search_class,
-        properties => $_[0]->search_properties,
-        entities   => $_[0]->search_entities(1),
-        links      => $_[0]->search_links,
-        actions    => $_[0]->search_actions(1),
-    },
+    entity_class_only                  => 'class only',
+    entity_properties_only             => 'properties only',
+    entity_top_level_sub_entities_only => 'top-level sub-entities only',
+    entity_nested_sub_entities_only    => 'nested sub-entities only',
+    entity_links_only                  => 'links only',
+    entity_actions_only_no_fields      => 'actions only (no fields)',
+    entity_actions_only_with_fields    => 'actions only (with fields)',
+    entity_complete                    => 'all parameters',
 );
 
 for my $test (pairs @tests) {
-    my ($description, $monkey) = @$test;
+    my ($method, $description) = @$test;
 
-    my %builder_args = $test_buildargs->$monkey;
-    my %siren_args   = $test_siren->$monkey;
-    my %json_struct  = $test_to_json->$monkey;
+    my %builder_args = $test_buildargs->$method;
+    my %siren_args   = $test_siren->$method;
+    my %json_struct  = $test_to_json->$method;
 
-    subtest $description => sub {
+    subtest "entity with $description" => sub {
 
         my $siren = Siren::Builder->new(%builder_args)->construct;
 
